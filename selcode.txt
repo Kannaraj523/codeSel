@@ -1,0 +1,187 @@
+package skan;
+
+import java.io.File;
+        import java.io.FileInputStream;
+        import java.io.FileOutputStream;
+        import java.util.List;
+
+        import org.apache.poi.ss.usermodel.Cell;
+        import org.apache.poi.xssf.usermodel.XSSFSheet;
+        import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+        import org.openqa.selenium.By;
+        import org.openqa.selenium.WebDriver;
+        import org.openqa.selenium.WebElement;
+        import org.openqa.selenium.chrome.ChromeDriver;
+
+public class script_with_excel_data {
+
+    public static void main(String[] args) throws Exception
+    {
+        File src = new File("D:\\Selenium\\Test_Result.xlsx");
+
+        FileInputStream fis = new FileInputStream(src);
+
+        XSSFWorkbook wb = new XSSFWorkbook(fis);
+
+        XSSFSheet sh = wb.getSheetAt(0);
+
+        System.setProperty("webdriver.chrome.driver", "D:\\Selenium\\chromedriver_win32\\chromedriver.exe");
+
+        WebDriver driver=new ChromeDriver();
+
+        driver.get("http://www.tcm.com/tcmdb/");
+
+        java.util.List<WebElement> links = driver.findElements(By.xpath("//div[@class='theList']/a"));
+
+        for ( int i=0;i<5;i++)
+        {
+            links = driver.findElements(By.xpath("//div[@class='theList']/a"));
+            String atitle = links.get(i).getText();
+            String title = sh.getRow(i).getCell(0).getStringCellValue();
+
+            if (atitle.equals(title))
+            {
+                Cell cell = sh.getRow(i).getCell(6);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(6);
+                }
+                cell.setCellValue("Pass");
+            }
+            else
+
+            {
+                Cell cell = sh.getRow(i).getCell(6);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(6);
+                }
+                cell.setCellValue("Fail");
+            }
+
+            links.get(i).click();
+
+            WebElement locatorElement= (WebElement) driver.findElement(By.xpath("//p[@class='bsynopsis']"));
+
+            String over=locatorElement.getText();
+
+            String aover=sh.getRow(i).getCell(1).getStringCellValue();
+
+            if (aover.equals(over))
+
+            {
+                Cell cell = sh.getRow(i).getCell(7);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(7);
+                }
+                cell.setCellValue("Pass");
+
+            }
+
+            else
+
+            {
+                Cell cell = sh.getRow(i).getCell(7);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(7);
+                }
+                cell.setCellValue("Fail");
+
+            }
+
+            List<WebElement>  Heronames = (List) driver.findElements(By.xpath("//div[@class='rwdv']/strong/a"));
+
+            String act1 = Heronames.get(0).getText();
+
+            String act2 = Heronames.get(1).getText();
+
+            String aact1=sh.getRow(i).getCell(2).getStringCellValue();
+
+            String aact2=sh.getRow(i).getCell(3).getStringCellValue();
+
+            if (aact1.equals(act1))
+
+            {
+                Cell cell = sh.getRow(i).getCell(8);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(8);
+                }
+                cell.setCellValue("Pass");
+
+            }
+            else
+            {
+                Cell cell = sh.getRow(i).getCell(8);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(8);
+                }
+                cell.setCellValue("Fail");
+            }
+
+
+            if (aact2.equals(act2))
+
+            {
+                Cell cell = sh.getRow(i).getCell(9);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(9);
+                }
+                cell.setCellValue("Pass");
+
+            }
+            else
+            {
+                Cell cell = sh.getRow(i).getCell(9);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(9);
+                }
+                cell.setCellValue("Fail");
+            }
+            WebElement ReleaseDate= (WebElement) driver.findElement(By.xpath("//div[@id='additional']/table/tbody/tr[2]/td[2]"));
+
+            String rel = ReleaseDate.getText();
+
+            String arel=sh.getRow(i).getCell(4).getStringCellValue();
+
+            if (rel.equals(arel))
+
+            {
+
+                Cell cell = sh.getRow(i).getCell(10);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(10);
+                }
+                cell.setCellValue("Pass");
+            }
+
+            else
+
+            {
+                Cell cell = sh.getRow(i).getCell(10);
+                if (cell == null)
+                {
+                    cell = sh.getRow(i).createCell(10);
+                }
+                cell.setCellValue("Fail");
+
+            }
+            driver.get("http://www.tcm.com/tcmdb/");
+
+        }
+
+        FileOutputStream fout = new FileOutputStream(src);
+
+        wb.write(fout);
+
+        wb.close();
+
+        driver.quit();
+    }
+}
